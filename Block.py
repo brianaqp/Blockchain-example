@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from Account import Account
 
+
 class Block:
     def __init__(
         self, previous_hash: str, list_of_transactions: list, block_number: int
@@ -10,7 +11,8 @@ class Block:
         self.list_of_transactions = list_of_transactions
 
         # hash del bloque actual
-        self.__block_hash = hash(f"{self.previous_hash}, {self.list_of_transactions}")
+        self.__block_hash = hash(
+            f"{self.previous_hash}, {self.list_of_transactions}")
 
         # Anadir el time stamp
         now = datetime.now()
@@ -33,5 +35,5 @@ class Block:
 
     def tx_in_format(self):
         for tx in self.list_of_transactions:
-            print(f"- {tx.sender.nickname} send {tx.value} to {tx.receiver.nickname}")
-            
+            print(
+                f"- {tx.sender.nickname} send {tx.value} to {tx.recipient.nickname}")

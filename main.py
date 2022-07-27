@@ -1,4 +1,3 @@
-from numpy import block
 from Account import Account
 from Block import Block
 from Blockchain import Blockchain
@@ -7,18 +6,20 @@ from Crypto.PublicKey import RSA
 
 # Inicializamos nuestra cadena de bloques
 print("### Inicializamos nuestra blockchain")
-blockchain = Blockchain() # Tambien se crea el bloque genesis.
+blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 
 # Crearemos una cuenta que interactuara con la blockchain
-main_account = Account("Fulanito")
-print(main_account.nickname)
-other_account = Account("Mungano")
+brian = Account("Brian")
+print(brian.nickname)
+aaron = Account("Aaron")
+
 
 # generamos un par de transacciones
-tx1 = Transaction(main_account, 20, other_account)
-tx2 = Transaction(main_account, 20, other_account)
-tx3 = Transaction(other_account, 20, main_account)
-tx4 = Transaction(other_account, 20, main_account)
+tx1 = Transaction(brian, 20, aaron)
+signature1 = tx1.sign_transaction()
+tx2 = Transaction(brian, 20, aaron)
+tx3 = Transaction(aaron, 20, brian)
+tx4 = Transaction(aaron, 20, brian)
 
 # subimos las transacciones a la blockchain
 blockchain.new_tx(tx1)
@@ -28,3 +29,6 @@ blockchain.new_tx(tx4)
 
 # Imprimimos la cadena de bloques completa
 blockchain.print_full_chain()
+
+# quiero ver la firma de la primera transacttion
+print(signature1)
