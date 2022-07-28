@@ -6,7 +6,7 @@ from Account import Account
 class Blockchain:
     def __init__(self):
         self.chain = []
-        self.tx_limit_per_block = 2
+        self.tx_limit_per_block = 1
         self.holding_tx = []
         self.generate_genesis_block()
 
