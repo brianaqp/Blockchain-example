@@ -10,11 +10,9 @@ from Crypto.Hash import SHA
 print("### Inicializamos nuestra blockchain")
 blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 
-# Crearemos una cuenta que interactuara con la blockchain
+# Creamos dos cuenta que interactuaran con la blockchain.
 brian = Account("Brian")
-print(brian.nickname)
 aaron = Account("Aaron")
-
 
 # generamos un par de transacciones
 tx1 = Transaction(brian, 20, aaron)
@@ -32,11 +30,9 @@ blockchain.new_tx(tx4)
 blockchain.print_full_chain()
 
 # quiero ver la firma de la primera transacttion
-signature = tx2.sign_transaction()
+signature1 = tx1.sign_transaction()
+signature3 = tx3.sign_transaction()
 
 # verificacion
-x = tx2.verify_transaction(signature)
-y = tx2.verify_transaction_wrong(signature)
-
-print(x)
-print(y)
+tx1.verify_transaction(signature1)
+tx3.verify_transaction(signature3)
