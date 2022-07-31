@@ -21,10 +21,10 @@ tx3 = Transaction(aaron, 20, brian)
 tx4 = Transaction(aaron, 20, brian)
 
 # subimos las transacciones a la blockchain
-blockchain.new_tx(tx1)
-blockchain.new_tx(tx2)
-blockchain.new_tx(tx3)
-blockchain.new_tx(tx4)
+blockchain.new_tx(brian, 35, aaron)
+blockchain.new_tx(brian, 15, aaron)
+blockchain.new_tx(aaron, 20, brian)
+blockchain.new_tx(aaron, 15, brian)
 
 # Imprimimos la cadena de bloques completa
 blockchain.print_full_chain()
@@ -36,3 +36,9 @@ signature3 = tx3.sign_transaction()
 # verificacion
 tx1.verify_transaction(signature1)
 tx3.verify_transaction(signature3)
+
+for block in blockchain.chain:
+    for tx in block.list_of_transactions:
+        print('-')
+        print(tx.to_dict())
+        print(tx.block)

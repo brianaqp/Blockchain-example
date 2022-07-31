@@ -14,8 +14,8 @@ class Transaction:
     def to_dict(self):
         """Exporta la transaccion en formato: dict."""
         return {
-            'sender': self.sender,
-            'recipient': self.recipient,
+            'sender': self.sender.nickname,
+            'recipient': self.recipient.nickname,
             'value': self.value,
             'time' : self.time}
 

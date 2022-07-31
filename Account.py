@@ -10,6 +10,7 @@ class Account:
         self.public_key = self.private_key.publickey()
         self.signer = PKCS115_SigScheme(self.private_key)
         self.verifier = PKCS115_SigScheme(self.public_key)
+        self.balance = 100
 
     @property
     def identity(self):
