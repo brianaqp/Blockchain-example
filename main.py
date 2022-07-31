@@ -14,13 +14,8 @@ blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 brian = Account("Brian")
 aaron = Account("Aaron")
 
-# generamos un par de transacciones
-tx1 = Transaction(brian, 20, aaron)
-tx2 = Transaction(brian, 20, aaron)
-tx3 = Transaction(aaron, 20, brian)
-tx4 = Transaction(aaron, 20, brian)
 
-# subimos las transacciones a la blockchain
+# generamos y subimos las transacciones a la blockchain
 blockchain.new_tx(brian, 35, aaron)
 blockchain.new_tx(brian, 15, aaron)
 blockchain.new_tx(aaron, 20, brian)
@@ -29,16 +24,14 @@ blockchain.new_tx(aaron, 15, brian)
 # Imprimimos la cadena de bloques completa
 blockchain.print_full_chain()
 
-# quiero ver la firma de la primera transacttion
-signature1 = tx1.sign_transaction()
-signature3 = tx3.sign_transaction()
+# Ejemplo de una verificaion
+# firma de un bloque
+signature = blockchain.chain[1].list_of_transactions[0].signature
 
-# verificacion
-tx1.verify_transaction(signature1)
-tx3.verify_transaction(signature3)
+# verificacion con la verificacion
+blockchain.chain[1].list_of_transactions[0].verify_transaction()
 
 for block in blockchain.chain:
     for tx in block.list_of_transactions:
         print('-')
-        print(tx.to_dict())
-        print(tx.block)
+        # print(tx.signature)
