@@ -5,15 +5,10 @@ from Crypto.Signature.pkcs1_15 import PKCS115_SigScheme
 from Crypto.Hash import SHA256
 import binascii
 
-class Status(Enum):
-    def __init__(self) -> None:
-        super().__init__()
-        self.PENDING = 0
-        self.CONFIRMED = 1
-        self.DECLINED = 2
-
-status = Status(0)
-
+class TxStatus(Enum):
+    PENDIENTE = 0
+    CONFIRMADA = 1
+    DECLINADA = 2
 
 class Transaction:
     def __init__(self, sender: str, value: int, recipient: str):
@@ -23,7 +18,7 @@ class Transaction:
         self.time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.block = None
         self.signature = None
-        self.status = None
+        self.status = TxStatus.PENDIENTE
 
 
     def to_dict(self):
@@ -36,6 +31,7 @@ class Transaction:
 
     def sign_transaction(self):
         """Recibe un objeto transaccion y devuelve la firma. en bytes"""
+        print("Firmando transaccion...")
         msg = str(self.to_dict()).encode()
         hash = SHA256.new(msg)
         signer = self.sender.signer
@@ -45,13 +41,14 @@ class Transaction:
 
     def verify_transaction(self):
         """Aqui se verifican las transacciones"""
+        print("Verificando la firma de la transaccion...")
         msg = str(self.to_dict()).encode()
         hash = SHA256.new(msg)
         verifier = self.sender.verifier
         try:
             verifier.verify(hash, self.signature)
-            print("Signature is valid.")
+            print("La firma es valida.")
             return True
         except:
-            print("Signature is invalid.")
+            print("La firma es invalida.")
             return False

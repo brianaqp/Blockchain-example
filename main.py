@@ -1,4 +1,5 @@
-from re import S
+import binascii
+from re import S, X
 from Account import Account
 from Block import Block
 from Blockchain import Blockchain
@@ -22,7 +23,7 @@ blockchain.new_tx(aaron, 20, brian)
 blockchain.new_tx(aaron, 15, brian)
 
 # Imprimimos la cadena de bloques completa
-blockchain.print_full_chain()
+# blockchain.print_full_chain()
 
 # Ejemplo de una verificaion
 # firma de un bloque
@@ -35,3 +36,7 @@ for block in blockchain.chain:
     for tx in block.list_of_transactions:
         print('-')
         # print(tx.signature)
+
+# prueba
+# x = binascii.hexlify(x).decode()
+# print(x)

@@ -9,6 +9,7 @@ class Block:
         self.block_number = block_number
         self.previous_hash = previous_hash
         self.list_of_transactions = list_of_transactions
+        self.nonce = 0
 
         # hash del bloque actual
         self.__block_hash = hash(

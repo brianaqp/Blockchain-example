@@ -1,3 +1,4 @@
+from cgi import print_directory
 from logging import exception
 from Block import Block
 from Transaction import Transaction
@@ -28,6 +29,7 @@ class Blockchain:
         para luego ser parte de un bloque. """
         # 1. Instanciar un objeto transaccion.
         tx = Transaction(_sender, _value, _receiver)
+        print("Nueva transaccion detectada... Estado: {}".format(tx.status.name))
         # 2. Esta transaccion necesita ser firmada (confirmada).
         tx.sign_transaction()
         # 3. La firma pasa a ser verificada, con la finalidad de comprobar que sea correcta.
@@ -41,7 +43,6 @@ class Blockchain:
         # 3.2. Si no es correcta, se rechaza esta transaccion
         else:
             pass
-
             
 
     def add_tx_to_block(self):
@@ -49,12 +50,20 @@ class Blockchain:
         _block_number = len(self.chain)
         try:
             block = Block(previous_hash=self.chain[-1].block_hash, list_of_transactions=self.holding_tx, block_number=_block_number)
+            self.mine(block)
             self.chain.append(block)
             self.holding_tx = []
             for tx in block.list_of_transactions:
                 tx.block = _block_number
+            print("### Bloque creado. ###\n")
         except:
             print("No se pudo crear el bloque. Error.")
+
+
+    def mine(self, block):
+        """Funciona que mina el bloque. """
+        pass
+
 
     def print_full_chain(self):
         for block in self.chain:
