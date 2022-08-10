@@ -21,6 +21,7 @@ blockchain.new_tx(brian, 35, aaron)
 blockchain.new_tx(brian, 15, aaron)
 blockchain.new_tx(aaron, 20, brian)
 blockchain.new_tx(aaron, 15, brian)
+blockchain.new_tx(brian, 1, aaron)
 
 # Imprimimos la cadena de bloques completa
 # blockchain.print_full_chain()
@@ -36,6 +37,9 @@ for block in blockchain.chain:
     for tx in block.list_of_transactions:
         print('-')
         # print(tx.signature)
+
+# imprimir toda la blockchain
+blockchain.print_full_chain()
 
 # prueba
 # x = binascii.hexlify(x).decode()
