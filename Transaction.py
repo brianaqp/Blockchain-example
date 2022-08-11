@@ -1,9 +1,8 @@
 from datetime import datetime
 from enum import Enum
-from telnetlib import STATUS
+from hashlib import new
 from Crypto.Signature.pkcs1_15 import PKCS115_SigScheme
 from Crypto.Hash import SHA256
-import binascii
 
 class TxStatus(Enum):
     PENDIENTE = 0
@@ -30,7 +29,7 @@ class Transaction:
             'time' : self.time}
 
     def sign_transaction(self):
-        """Recibe un objeto transaccion y devuelve la firma. en bytes"""
+        """Recibe un objeto transaccion y devuelve la firmaen bytes"""
         print("Firmando transaccion...")
         msg = str(self.to_dict()).encode()
         hash = SHA256.new(msg)
@@ -39,7 +38,7 @@ class Transaction:
         # print("Signature:", binascii.hexlify(signature))
         self.signature = signature
 
-    def verify_transaction(self):
+    def verify_signature(self):
         """Aqui se verifican las transacciones"""
         print("Verificando la firma de la transaccion...")
         msg = str(self.to_dict()).encode()
@@ -52,3 +51,11 @@ class Transaction:
         except:
             print("La firma es invalida.")
             return False
+
+    def change_status(self, new_status):
+        if new_status is 'CONFIRMADA':
+            self.status = TxStatus.CONFIRMADA
+        elif new_status is 'PENDIENTE':
+            self.status = TxStatus.PENDIENTE
+        elif new_status is 'DECLINADA':
+            self.status = TxStatus.DECLINADA

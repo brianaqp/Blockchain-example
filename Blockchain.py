@@ -36,15 +36,15 @@ class Blockchain:
         tx.sign_transaction()
         # 3. La firma pasa a ser verificada, con la finalidad de comprobar que sea correcta.
         # 3.1. Si es correcta signifa que puede agregarse a un bloque
-        if tx.verify_transaction() == True:
-            if len(self.holding_tx) < self.tx_limit_per_block:
+        if tx.verify_signature() == True:
+            if len(self.holding_tx) < self.tx_limit_per_block: # Revisa si aun cabe en la lista de espera
                 self.holding_tx.append(tx)
                 print("Transaccion añadida a la espera.")
-            if len(self.holding_tx) >= self.tx_limit_per_block:
-                self.add_tx_to_block()
+            if len(self.holding_tx) >= self.tx_limit_per_block: # Revisa si la lista de espera puede proceder
+                tx_added = self.add_tx_to_block()
         # 3.2. Si no es correcta, se rechaza esta transaccion
         else:
-            pass
+            return 
             
 
     def add_tx_to_block(self):
@@ -55,10 +55,12 @@ class Blockchain:
         block = Block(previous_hash=self.chain[-1].hash,list_of_transactions=self.holding_tx, block_number=_block_number)
         self.mine(block)
         self.chain.append(block)
+        print("### Bloque creado. ###\n")
         self.holding_tx = []
         for tx in block.list_of_transactions:
             tx.block = _block_number
-        print("### Bloque creado. ###\n")
+        self.verify_latest_tx()
+        return True
         # except Exception as e:
         #  print("No se pudo crear el bloque. Error: ", e)
 
@@ -87,6 +89,12 @@ class Blockchain:
         block.hash = block_hash
 
 
+    def verify_latest_tx(self):
+        "Verifica las ultimas transacciones del bloque añadido."
+        latest_block = self.chain[-1]
+        block_transactions = latest_block.list_of_transactions
+        for tx in block_transactions:
+            tx.change_status('CONFIRMADA')
 
     def print_full_chain(self):
         for block in self.chain:

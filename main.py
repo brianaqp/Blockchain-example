@@ -31,7 +31,7 @@ blockchain.new_tx(brian, 1, aaron)
 signature = blockchain.chain[1].list_of_transactions[0].signature
 
 # verificacion con la verificacion
-blockchain.chain[1].list_of_transactions[0].verify_transaction()
+blockchain.chain[1].list_of_transactions[0].verify_signature()
 
 for block in blockchain.chain:
     for tx in block.list_of_transactions:
@@ -42,5 +42,5 @@ for block in blockchain.chain:
 blockchain.print_full_chain()
 
 # prueba
-# x = binascii.hexlify(x).decode()
-# print(x)
+print()
+print(blockchain.chain[-1].list_of_transactions[0].__dict__)
