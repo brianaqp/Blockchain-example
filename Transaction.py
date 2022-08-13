@@ -1,5 +1,6 @@
 from datetime import datetime
 from enum import Enum
+from Account import Account
 from hashlib import new
 from Crypto.Signature.pkcs1_15 import PKCS115_SigScheme
 from Crypto.Hash import SHA256
@@ -10,7 +11,7 @@ class TxStatus(Enum):
     DECLINADA = 2
 
 class Transaction:
-    def __init__(self, sender: str, value: int, recipient: str):
+    def __init__(self, sender: Account, value: int, recipient: Account):
         self.sender = sender
         self.value = value
         self.recipient = recipient
@@ -18,6 +19,8 @@ class Transaction:
         self.block = None
         self.signature = None
         self.status = TxStatus.PENDIENTE
+        # Al instanciarse una tx, esta debe reflejarse en la cuenta que la envia. (Sender)
+        sender.list_of_all_transactions.append(self)
 
 
     def to_dict(self):
@@ -38,7 +41,7 @@ class Transaction:
         # print("Signature:", binascii.hexlify(signature))
         self.signature = signature
 
-    def verify_signature(self):
+    def verify_signature(self) -> bool:
         """Aqui se verifican las transacciones"""
         print("Verificando la firma de la transaccion...")
         msg = str(self.to_dict()).encode()
