@@ -43,4 +43,4 @@ blockchain.print_full_chain()
 
 # prueba
 print()
-print(blockchain.chain[-1].list_of_transactions[0].__dict__)
+print(blockchain.chain[1].list_of_transactions[0].__dict__)

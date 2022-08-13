@@ -16,7 +16,6 @@ class Blockchain:
         """Inicializa el bloque genesis."""
         if len(self.chain) == 0: # Comprueba que la blockchain este vacia.
             tx = Transaction(Account("Genesis0"), 0, Account("Genesis01"))
-            tx.block = 0
             block = Block('0', [tx], 0)
             self.mine(block)
             self.chain.append(block)
