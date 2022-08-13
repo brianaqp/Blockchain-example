@@ -11,6 +11,7 @@ class Account:
         self.signer = PKCS115_SigScheme(self.private_key)
         self.verifier = PKCS115_SigScheme(self.public_key)
         self.balance = 100
+        self.list_of_all_transactions = []
 
     @property
     def identity(self):
