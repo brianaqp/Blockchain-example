@@ -1,11 +1,9 @@
 import binascii
+from http.server import BaseHTTPRequestHandler
 from re import S, X
 from Account import Account
 from Block import Block
 from Blockchain import Blockchain
-from Transaction import Transaction
-from Crypto.PublicKey import RSA
-from Crypto.Hash import SHA
 
 # Inicializamos nuestra cadena de bloques
 print("### Inicializamos nuestra blockchain")
@@ -17,11 +15,11 @@ aaron = Account("Aaron")
 
 
 # generamos y subimos las transacciones a la blockchain
-blockchain.new_tx(brian, 35, aaron)
+blockchain.new_tx(brian, 101, aaron)
 blockchain.new_tx(brian, 15, aaron)
-blockchain.new_tx(aaron, 20, brian)
-blockchain.new_tx(aaron, 15, brian)
+blockchain.new_tx(brian, 15, aaron)
 blockchain.new_tx(brian, 1, aaron)
+blockchain.new_tx(aaron, 31 , brian)
 
 # Imprimimos la cadena de bloques completa
 # blockchain.print_full_chain()
@@ -43,4 +41,9 @@ blockchain.print_full_chain()
 
 # prueba
 print()
-print(blockchain.chain[1].list_of_transactions[0].__dict__)
+print('cuenta: ', brian.nickname)
+print('transacciones: ', brian.list_of_all_transactions)
+print('ultima transacciones: ', brian.list_of_all_transactions[0].__dict__)
+print(brian.balance)
+print(aaron.balance)
+print(len(blockchain.chain))

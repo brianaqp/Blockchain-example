@@ -28,8 +28,17 @@ class Blockchain:
         tipo Transaccion; verifica que sea una transaccion valida
         y lo anade a la holding list de la blockchain, 
         para luego ser parte de un bloque. """
+        # 0.5. Se debe verificar que quien manda la tx, tenga suficiente balance en su cuenta.
+        if _value > _sender.balance: 
+            print()
+            print('No tienes suficiente balance en tu cuenta.')
+            return
         # 1. Instanciar un objeto transaccion.
         tx = Transaction(_sender, _value, _receiver)
+        # 1.2 Al momento de instanciar el objeto, le restamos a la cuenta principal
+        # el dinero que envio.
+        _sender.balance -= _value
+        print()
         print("Nueva transaccion detectada... Estado: {}".format(tx.status.name))
         # 2. Esta transaccion necesita ser firmada (confirmada).
         tx.sign_transaction()
@@ -40,8 +49,7 @@ class Blockchain:
                 self.holding_tx.append(tx)
                 print("Transaccion añadida a la espera.")
             if len(self.holding_tx) >= self.tx_limit_per_block: # Revisa si la lista de espera puede proceder
-                tx_added = self.add_tx_to_block()
-        # 3.2. Si no es correcta, se rechaza esta transaccion
+                self.add_tx_to_block()
         else:
             return 
             
@@ -50,7 +58,6 @@ class Blockchain:
         print("### Creando nuevo bloque ###")
         print('### Bloque No. ', len(self.chain))
         _block_number = len(self.chain)
-        # try:
         block = Block(previous_hash=self.chain[-1].hash,list_of_transactions=self.holding_tx, block_number=_block_number)
         self.mine(block)
         self.chain.append(block)
@@ -59,9 +66,7 @@ class Blockchain:
         for tx in block.list_of_transactions:
             tx.block = _block_number
         self.verify_latest_tx()
-        return True
-        # except Exception as e:
-        #  print("No se pudo crear el bloque. Error: ", e)
+        self.send_money_to_receivers()
 
 
     def mine(self, block):
@@ -89,11 +94,23 @@ class Blockchain:
 
 
     def verify_latest_tx(self):
-        "Verifica las ultimas transacciones del bloque añadido."
+        """Pone como confirmadas las transacciones que ya forman parte de la cadena de
+        Bloques original."""
         latest_block = self.chain[-1]
         block_transactions = latest_block.list_of_transactions
         for tx in block_transactions:
             tx.change_status('CONFIRMADA')
+
+    def send_money_to_receivers(self):
+        """Funcion que envia el dinero a los recipientes."""
+        latest_block = self.chain[-1]
+        block_transactions = latest_block.list_of_transactions
+        for tx in block_transactions:
+            if tx.status.name == 'CONFIRMADA':
+                tx.recipient.balance += tx.value
+            if tx.status.name == 'DECLINADA':
+                tx.sender.balance += tx.value
+    
 
     def print_full_chain(self):
         for block in self.chain:
