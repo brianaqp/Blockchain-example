@@ -10,3 +10,10 @@ Que falta actualmente?
 
 
 - Definir si sera proof of work o proof of stake. (Mas que definir, poner los dos ejemplos.)
+
+- PLAN ACTUAL
+añadir proof of stake:
+1.- Que se incluyan validadores
+2.- Se escojan al azar
+3.- Validan la transaccion
+4.- Añada un bloque

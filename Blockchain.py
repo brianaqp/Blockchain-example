@@ -23,6 +23,11 @@ class Blockchain:
         else:
             raise "Error: La Blockchain tiene que estar vacia."
     
+    def set_protocol(self, protocol: str):
+        if protocol == 'PoW': # Proof of Work (Todos los nodos compiten para ver quien mina primero)
+            pass
+        if protocol == 'PoS': # Proof of Stake (Se escoje un validador, encargado de añadir el bloque a la cadena; mientras los demas confirman)
+            pass
 
     def new_tx(self, _sender: Account, _value: int, _receiver: Account):
         """Recibe los parametros para instanciar un objeto de 
