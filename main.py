@@ -16,7 +16,7 @@ aaron = Account("Aaron")
 
 # generamos y subimos las transacciones a la blockchain
 blockchain.new_tx(brian, 101, aaron)
-blockchain.new_tx(brian, 15, aaron)
+blockchain.new_tx(brian, 20, aaron)
 blockchain.new_tx(brian, 15, aaron)
 blockchain.new_tx(brian, 1, aaron)
 blockchain.new_tx(aaron, 31 , brian)
@@ -34,7 +34,7 @@ blockchain.chain[1].list_of_transactions[0].verify_signature()
 for block in blockchain.chain:
     for tx in block.list_of_transactions:
         print('-')
-        # print(tx.signature)
+        print(tx.status)
 
 # imprimir toda la blockchain
 blockchain.print_full_chain()

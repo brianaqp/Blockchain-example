@@ -19,6 +19,7 @@ class Blockchain:
             block = Block('0', [tx], 0)
             self.mine(block)
             self.chain.append(block)
+            block.list_of_transactions[0].change_status('CONFIRMADA')
         else:
             raise "Error: La Blockchain tiene que estar vacia."
     
@@ -107,7 +108,7 @@ class Blockchain:
         block_transactions = latest_block.list_of_transactions
         for tx in block_transactions:
             # Condicional que cambia el estado de la transaccion a Declinada
-            # tx.change_status('DECLINADA')
+            tx.change_status('DECLINADA')
             if tx.status.name == 'CONFIRMADA':
                 tx.recipient.balance += tx.value
             if tx.status.name == 'DECLINADA':
