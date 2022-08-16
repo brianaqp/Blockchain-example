@@ -1,6 +1,6 @@
 import json
 from Block import Block
-from Transaction import Transaction
+from Transaction import Transaction, TxStatus
 from Account import Account
 from Crypto.Hash import SHA256
 
@@ -106,12 +106,13 @@ class Blockchain:
         latest_block = self.chain[-1]
         block_transactions = latest_block.list_of_transactions
         for tx in block_transactions:
+            # Condicional que cambia el estado de la transaccion a Declinada
+            # tx.change_status('DECLINADA')
             if tx.status.name == 'CONFIRMADA':
                 tx.recipient.balance += tx.value
             if tx.status.name == 'DECLINADA':
                 tx.sender.balance += tx.value
     
-
     def print_full_chain(self):
         for block in self.chain:
             block.print_block_info()
