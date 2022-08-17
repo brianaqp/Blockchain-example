@@ -17,3 +17,10 @@ añadir proof of stake:
 2.- Se escojan al azar
 3.- Validan la transaccion
 4.- Añada un bloque
+
+Investigacion: La forma de validar el bloque seria como revisar la firma de una transaccion.
+
+hash = last_block.hash
+_hash = hash(last_block.__dict__)
+if hash = _hash:
+    validated.

@@ -76,7 +76,8 @@ class Blockchain:
 
 
     def mine(self, block):
-        """Funciona que mina el bloque. """
+        """Funciona que mina el bloque.
+        Funciona segun el protocolo de Proof of Stake. """
         print('Dentro de funcion minado...')
         # Primero obtenemos el string que contiene toda la informacion del bloque.
         block_header = json.dumps(block.get_block_header()).encode()
