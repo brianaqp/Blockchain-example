@@ -3,6 +3,9 @@ from Block import Block
 from Transaction import Transaction, TxStatus
 from Account import Account
 from Crypto.Hash import SHA256
+import sys
+from validadores import Validador
+
 
 
 class Blockchain:
@@ -23,11 +26,11 @@ class Blockchain:
         else:
             raise "Error: La Blockchain tiene que estar vacia."
     
-    def set_protocol(self, protocol: str):
-        if protocol == 'PoW': # Proof of Work (Todos los nodos compiten para ver quien mina primero)
-            pass
-        if protocol == 'PoS': # Proof of Stake (Se escoje un validador, encargado de añadir el bloque a la cadena; mientras los demas confirman)
-            pass
+    def set_consensus(self, protocol: str):
+        if protocol not in ('PoW', 'PoS'):
+            print('Seleccione un consenso de los dos disponibles.(PoW, PoS)')
+            sys.exit()
+        self.consensus = protocol
 
     def new_tx(self, _sender: Account, _value: int, _receiver: Account):
         """Recibe los parametros para instanciar un objeto de 
@@ -61,18 +64,28 @@ class Blockchain:
             
 
     def add_tx_to_block(self):
+        """Funcion que toma las transacciones en espera y procede a implementarlas en un bloque, 
+        para su posterior adision en la cadena de bloques."""
         print("### Creando nuevo bloque ###")
         print('### Bloque No. ', len(self.chain))
         _block_number = len(self.chain)
-        block = Block(previous_hash=self.chain[-1].hash,list_of_transactions=self.holding_tx, block_number=_block_number)
-        self.mine(block)
-        self.chain.append(block)
-        print("### Bloque creado. ###\n")
-        self.holding_tx = []
-        for tx in block.list_of_transactions:
-            tx.block = _block_number
-        self.verify_latest_tx()
-        self.send_money_to_receivers()
+        # Consenso Proof of Work
+        if self.consensus == 'PoW':
+            block = Block(previous_hash=self.chain[-1].hash,list_of_transactions=self.holding_tx, block_number=_block_number)
+            self.mine(block)
+            self.chain.append(block)
+            print("### Bloque creado. ###\n")
+            self.holding_tx = []
+            for tx in block.list_of_transactions:
+                tx.block = _block_number
+            self.verify_latest_tx()
+            self.send_money_to_receivers()
+        # Consenso Proof of Stake
+        if self.consensus == 'PoS':
+            validador_1 = Validador(100)
+            validador_2 = Validador(500)
+            validador_3 = Validador(250)
+            self.validadores = [validador_1, validador_2, validador_3]
 
 
     def mine(self, block):

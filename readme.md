@@ -8,17 +8,12 @@
 **Pendiente
 - Prestar atencion al proceso. (tx -> sign -> verify -> blockchain). Puede estar mal.
 - Definir si sera proof of work o proof of stake. (Mas que definir, poner los dos ejemplos.)
+- Incluir el Merkle Root
 
 # PLAN ACTUAL
-añadir proof of stake:
-1.- Que se incluyan validadores
-2.- Se escojan al azar
-3.- Validan la transaccion
-4.- Añada un bloque
-
+**Leer el link de abajo
 > Investigacion: La forma de validar el bloque seria como revisar la firma de una transaccion.
+Pagina muy buena que me contiene informacion de PoS
+https://medium.com/techskill-brew/proof-of-stake-or-pos-in-blockchain-part-8-blockchain-basics-32d461232e1c#:~:text=Forging%20and%20forger%3A%20In%20the,known%20as%20validators%20or%20forgers.
 
-hash = last_block.hash
-_hash = hash(last_block.__dict__)
-if hash = _hash:
-    validated.
+Lo que debo de hacer ahora es seguir lo que dice la pagina de arriba para incluir Proof Of Stake

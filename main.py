@@ -1,8 +1,4 @@
-import binascii
-from http.server import BaseHTTPRequestHandler
-from re import S, X
 from Account import Account
-from Block import Block
 from Blockchain import Blockchain
 
 # Inicializamos nuestra cadena de bloques
@@ -10,7 +6,7 @@ print("### Inicializamos nuestra blockchain")
 blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 
 # Escojemos que protocolo queremos en nuestra blockchain
-blockchain.set_protocol('PoW')
+blockchain.set_consensus('PoW')
 
 # Creamos dos cuenta que interactuaran con la blockchain.
 brian = Account("Brian")

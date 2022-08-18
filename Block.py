@@ -9,6 +9,7 @@ class Block:
         self.list_of_transactions = list_of_transactions
         self.nonce = 0
         self.hash = 0
+        self.merkle_root = 0
         for tx in self.list_of_transactions:
             tx.block = block_number
         # Anadir el time stamp
