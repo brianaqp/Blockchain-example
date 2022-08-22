@@ -82,10 +82,7 @@ class Blockchain:
             self.send_money_to_receivers()
         # Consenso Proof of Stake
         if self.consensus == 'PoS':
-            validador_1 = Validador(100)
-            validador_2 = Validador(500)
-            validador_3 = Validador(250)
-            self.validadores = [validador_1, validador_2, validador_3]
+            return
 
 
     def mine(self, block):
@@ -136,3 +133,15 @@ class Blockchain:
     def print_full_chain(self):
         for block in self.chain:
             block.print_block_info()
+
+    # Apartir de aqui iniciare las funciones pertinentes a Proof of Stake.
+    def set_validators(self, validators):
+        """Funcion que determina los validadores de la red."""
+        # Aqui se creara una variable que almacene las direcciones de los validadores
+        # y el dinero que metieron en stack. (Similar a un SmartContract)
+        self.stackers = {}
+        for validator in validators:
+            self.total_stacked += validator.money
+            self.stackers.update({validator: validator.money})
+            validator.money -= validator.money 
+        self.validators = validators
