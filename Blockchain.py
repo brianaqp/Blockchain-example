@@ -1,11 +1,9 @@
 import json
 from Block import Block
-from Transaction import Transaction, TxStatus
+from Transaction import Transaction
 from Account import Account
 from Crypto.Hash import SHA256
 import sys
-from validadores import Validador
-
 
 
 class Blockchain:
@@ -14,6 +12,10 @@ class Blockchain:
         self.tx_limit_per_block = 1
         self.holding_tx = []
         self.generate_genesis_block()
+        # Atributos propios de PoS
+        self.stackers = {}
+        self.total_stacked = 0
+        self.validators = {}
 
     def generate_genesis_block(self):
         """Inicializa el bloque genesis."""
@@ -82,8 +84,7 @@ class Blockchain:
             self.send_money_to_receivers()
         # Consenso Proof of Stake
         if self.consensus == 'PoS':
-            return
-
+            forger = self.select_the_forger()
 
     def mine(self, block):
         """Funciona que mina el bloque.
@@ -135,13 +136,27 @@ class Blockchain:
             block.print_block_info()
 
     # Apartir de aqui iniciare las funciones pertinentes a Proof of Stake.
+
     def set_validators(self, validators):
         """Funcion que determina los validadores de la red."""
-        # Aqui se creara una variable que almacene las direcciones de los validadores
+        # La variable self.validators almacena las direcciones de los validadores
         # y el dinero que metieron en stack. (Similar a un SmartContract)
-        self.stackers = {}
         for validator in validators:
             self.total_stacked += validator.money
             self.stackers.update({validator: validator.money})
+            if validator.money > 100: # Si stackea mas de 100 monedas, puede ser validador.
+                self.validators.update({validator: validator.money})
             validator.money -= validator.money 
-        self.validators = validators
+        # No es lo mismo un validador que una persona que stackea su dinero. Por eso
+        # existen 2 variables.
+
+    def select_the_forger(self):
+        """Funcion que selecciona que validador va a ser el forjador del nuevo bloque."""
+        # Dentro de esta funcion, se va a disenar un algoritmo que escoja al siguiente forger, el siguiente ejemplo fue una implementacion propia, pero cada blockchain puede variar.
+        # 
+        # Cada validador tiene un 'stack' dentro del total en la blockchain. Cada
+        # moneda que ingresaron es un 'ticket' que les puede dar la posibilidad de ser
+        # el siguiente forjador del bloque.
+        # La cantidad de tickets va a depender de la cantidad de monedas que ingresaron. ejemplo: Si el usuario stackeo 100 monedas, tiene 100 tickets dentro de la rifa.
+        
+        # Este algoritmo escojera un ticket al azar. El dueno del ticker sera el nuevo forger.

@@ -17,7 +17,7 @@ aaron = Account("Aaron")
 charles = Validador(350)
 edwin = Validador(500)
 oliver = Validador(200)
-erick = Validador(180)
+erick = Validador(90)
 sonia = Validador(275)
 
 # Los incluimos en nuestra BlockChain
@@ -31,4 +31,5 @@ blockchain.new_tx(brian, 1, aaron)
 blockchain.new_tx(aaron, 31 , brian)
 
 
-# Ejemplo de una verificaion
+# Prueba
+print(blockchain.validators)
