@@ -14,11 +14,11 @@ brian = Account("Brian")
 aaron = Account("Aaron")
 
 # Inicializamos a los Validadores de la red
-charles = Validador(350)
-edwin = Validador(500)
-oliver = Validador(200)
-erick = Validador(90)
-sonia = Validador(275)
+charles = Validador(350, 'charles')
+edwin = Validador(500, 'edwin')
+oliver = Validador(200, 'oliver')
+erick = Validador(90, 'erick')
+sonia = Validador(275, 'sonia')
 
 # Los incluimos en nuestra BlockChain
 blockchain.set_validators((charles, edwin, oliver, erick, sonia))
@@ -32,4 +32,8 @@ blockchain.new_tx(aaron, 31 , brian)
 
 
 # Prueba
-print(blockchain.validators)
+for validator in blockchain.validators.keys():
+    print('Validor: ')
+    print(len(validator.tokens))
+    for token in validator.tokens:
+        print(token.owner.nickname)

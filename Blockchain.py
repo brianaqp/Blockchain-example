@@ -1,6 +1,7 @@
 import json
 from Block import Block
 from Transaction import Transaction
+from validadores import Token
 from Account import Account
 from Crypto.Hash import SHA256
 import sys
@@ -146,6 +147,7 @@ class Blockchain:
             self.stackers.update({validator: validator.money})
             if validator.money > 100: # Si stackea mas de 100 monedas, puede ser validador.
                 self.validators.update({validator: validator.money})
+                validator.new_tokens(validator.money)
             validator.money -= validator.money 
         # No es lo mismo un validador que una persona que stackea su dinero. Por eso
         # existen 2 variables.
