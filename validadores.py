@@ -4,11 +4,13 @@ class Validador():
         self.nickname = nickname
         self.tokens = []
 
-    def new_tokens(self, total_coins):
-        # por cada moneda, se creara un token
+    def set_tokens(self, total_coins):
         for every_coin in range(0, total_coins):
             self.tokens.append(Token(self))
 
+    def get_tokens(self):
+        return len(self.tokens)
+        
 
 class Token():
     def __init__(self, owner):

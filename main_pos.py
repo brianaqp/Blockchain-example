@@ -34,6 +34,6 @@ blockchain.new_tx(aaron, 31 , brian)
 # Prueba
 for validator in blockchain.validators.keys():
     print('Validor: ')
-    print(len(validator.tokens))
-    for token in validator.tokens:
-        print(token.owner.nickname)
+    print(validator.get_tokens())
+    
+        # print(token.owner.nickname)

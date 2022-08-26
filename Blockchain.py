@@ -4,6 +4,7 @@ from Transaction import Transaction
 from validadores import Token
 from Account import Account
 from Crypto.Hash import SHA256
+from random import sample
 import sys
 
 
@@ -147,8 +148,9 @@ class Blockchain:
             self.stackers.update({validator: validator.money})
             if validator.money > 100: # Si stackea mas de 100 monedas, puede ser validador.
                 self.validators.update({validator: validator.money})
-                validator.new_tokens(validator.money)
+                validator.set_tokens(validator.money)
             validator.money -= validator.money 
+        self.select_the_forger()
         # No es lo mismo un validador que una persona que stackea su dinero. Por eso
         # existen 2 variables.
 
@@ -162,3 +164,24 @@ class Blockchain:
         # La cantidad de tickets va a depender de la cantidad de monedas que ingresaron. ejemplo: Si el usuario stackeo 100 monedas, tiene 100 tickets dentro de la rifa.
         
         # Este algoritmo escojera un ticket al azar. El dueno del ticker sera el nuevo forger.
+        # 1.- Lista que almacenara todos los tickets de la rifa
+        pool = []
+        # 2.- Bucle que recorrera a cada validador, y añadara sus tokens a la lista general.
+        for validator in self.validators:
+            pool += validator.tokens
+        # 3.- Se revuelve la lista. (Como si fuera un sorteo.)
+        print('Acumulando los tokens de los participantes de la lista...')
+        print(len(pool), '- tokens acumulados.')
+        print('Revolviendo la lista...')
+        pool = sample(pool, len(pool))
+        print('Lista revuelta!')
+        # Funcion que revisa los tokens de cada quien. Estaria chido ponerla como funcion aparte.
+        contador = 0
+        for validator in self.validators.keys():
+            for token in pool:
+                if token.owner.nickname == validator.nickname:
+                    contador += 1
+            print(validator.nickname, contador)
+            contador = 0
+        # Fin de la validacion
+        # Aqui deberia de ir algo estilo, escojer el ticket ganador.
