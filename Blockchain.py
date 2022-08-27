@@ -56,6 +56,8 @@ class Blockchain:
         print("Nueva transaccion detectada... Estado: {}".format(tx.status.name))
         # 2. Esta transaccion necesita ser firmada (confirmada).
         tx.sign_transaction()
+        # Aqui no se si sea correcto verificar la firma de una vez. Mas que nada por el consenso PoS.
+        
         # 3. La firma pasa a ser verificada, con la finalidad de comprobar que sea correcta.
         # 3.1. Si es correcta signifa que puede agregarse a un bloque
         if tx.verify_signature() == True:
