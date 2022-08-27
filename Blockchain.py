@@ -2,6 +2,7 @@ import json
 from Block import Block
 from Transaction import Transaction
 from validadores import Token
+from forge import Forge
 from Account import Account
 from Crypto.Hash import SHA256
 from random import sample, choice
@@ -90,7 +91,9 @@ class Blockchain:
             forger, attestors = self.select_the_forger()
             print('Testigos: ', attestors)
             print('Forjador: ', forger)
-
+            # En proceso de verificar las tx...
+            forger.verify_tx(self.holding_tx)
+            
     def mine(self, block):
         """Funciona que mina el bloque.
         Funciona segun el protocolo de Proof of Stake. """
@@ -187,12 +190,13 @@ class Blockchain:
             contador = 0
         # Fin de la validacion
         # Aqui deberia de ir algo estilo, escojer el ticket ganador.
-        winner = choice(pool)
-        print(winner.owner)
-        print(f'El forjador del nuevo bloque sera... {winner.owner.nickname}')
+        ticket_winner = choice(pool)
+        forger = Forge(ticket_winner.owner)
+        print(forger)
+        print(f'El forjador del nuevo bloque sera... {forger.validator}')
         # los validadores no ganadores del sorteo pasan a ser testigos.
         # los testigos estan encargados de revisar que el forjador haga lo correcto
         attestors = [validator for validator in self.validators]
         # se remueve el forjador, asi solo quedan los testigos
-        attestors.remove(winner.owner)
-        return winner.owner, attestors
+        attestors.remove(forger.validator)
+        return forger, attestors

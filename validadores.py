@@ -10,7 +10,7 @@ class Validador():
 
     def get_tokens(self):
         return len(self.tokens)
-        
+    
 
 class Token():
     def __init__(self, owner):
