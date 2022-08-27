@@ -4,7 +4,7 @@ from Transaction import Transaction
 from validadores import Token
 from Account import Account
 from Crypto.Hash import SHA256
-from random import sample
+from random import sample, choice
 import sys
 
 
@@ -86,7 +86,10 @@ class Blockchain:
             self.send_money_to_receivers()
         # Consenso Proof of Stake
         if self.consensus == 'PoS':
-            forger = self.select_the_forger()
+            print('En PoS:')
+            forger, attestors = self.select_the_forger()
+            print('Testigos: ', attestors)
+            print('Forjador: ', forger)
 
     def mine(self, block):
         """Funciona que mina el bloque.
@@ -150,7 +153,6 @@ class Blockchain:
                 self.validators.update({validator: validator.money})
                 validator.set_tokens(validator.money)
             validator.money -= validator.money 
-        self.select_the_forger()
         # No es lo mismo un validador que una persona que stackea su dinero. Por eso
         # existen 2 variables.
 
@@ -185,3 +187,12 @@ class Blockchain:
             contador = 0
         # Fin de la validacion
         # Aqui deberia de ir algo estilo, escojer el ticket ganador.
+        winner = choice(pool)
+        print(winner.owner)
+        print(f'El forjador del nuevo bloque sera... {winner.owner.nickname}')
+        # los validadores no ganadores del sorteo pasan a ser testigos.
+        # los testigos estan encargados de revisar que el forjador haga lo correcto
+        attestors = [validator for validator in self.validators]
+        # se remueve el forjador, asi solo quedan los testigos
+        attestors.remove(winner.owner)
+        return winner.owner, attestors

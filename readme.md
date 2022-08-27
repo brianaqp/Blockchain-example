@@ -17,3 +17,5 @@ Pagina muy buena que me contiene informacion de PoS
 https://medium.com/techskill-brew/proof-of-stake-or-pos-in-blockchain-part-8-blockchain-basics-32d461232e1c#:~:text=Forging%20and%20forger%3A%20In%20the,known%20as%20validators%20or%20forgers.
 
 Lo que debo de hacer ahora es seguir lo que dice la pagina de arriba para incluir Proof Of Stake
+
+Ya se seleccionaron los validadores y al ganador. Me quede en la funcion add_tx_to_block.
