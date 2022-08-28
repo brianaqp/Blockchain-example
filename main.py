@@ -1,4 +1,4 @@
-from Account import Account
+from account import Account
 from Blockchain import Blockchain
 
 # Inicializamos nuestra cadena de bloques
@@ -45,4 +45,4 @@ print('transacciones: ', brian.list_of_all_transactions)
 print('ultima transacciones: ', brian.list_of_all_transactions[0].__dict__)
 print(brian.balance)
 print(aaron.balance)
-print(len(blockchain.chain))
+print(blockchain.chain[-1].list_of_transactions[-1].signature)

@@ -1,9 +1,9 @@
 import json
 from Block import Block
 from Transaction import Transaction
-from validadores import Token
+from tokens import Token
 from forge import Forge
-from Account import Account
+from account import Account
 from Crypto.Hash import SHA256
 from random import sample, choice
 import sys
@@ -94,9 +94,13 @@ class Blockchain:
             print('Testigos: ', attestors)
             print('Forjador: ', forger)
             # En proceso de verificar las tx...
-            forger.verify_tx(self.holding_tx)
+            verified_tx = forger.verify_tx(self.holding_tx)
+            block = Block(previous_hash=self.chain[-1].hash, list_of_transactions=verified_tx, block_number=_block_number)
+            forger.sign_block(block)
+
+
             
-    def mine(self, block):
+    def mine(self, block) -> None:
         """Funciona que mina el bloque.
         Funciona segun el protocolo de Proof of Stake. """
         print('Dentro de funcion minado...')
@@ -152,12 +156,12 @@ class Blockchain:
         # La variable self.validators almacena las direcciones de los validadores
         # y el dinero que metieron en stack. (Similar a un SmartContract)
         for validator in validators:
-            self.total_stacked += validator.money
-            self.stackers.update({validator: validator.money})
-            if validator.money > 100: # Si stackea mas de 100 monedas, puede ser validador.
-                self.validators.update({validator: validator.money})
-                validator.set_tokens(validator.money)
-            validator.money -= validator.money 
+            self.total_stacked += validator.balance
+            self.stackers.update({validator: validator.balance})
+            if validator.balance > 100: # Si stackea mas de 100 monedas, puede ser validador.
+                self.validators.update({validator: validator.balance})
+                validator.set_tokens(validator.balance)
+            validator.balance -= validator.balance
         # No es lo mismo un validador que una persona que stackea su dinero. Por eso
         # existen 2 variables.
 

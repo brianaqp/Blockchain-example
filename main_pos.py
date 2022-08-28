@@ -1,5 +1,4 @@
-from Account import Account
-from validadores import Validador
+from account import Account, Validator
 from Blockchain import Blockchain
 
 # Inicializamos nuestra cadena de bloques
@@ -14,11 +13,11 @@ brian = Account("Brian")
 aaron = Account("Aaron")
 
 # Inicializamos a los Validadores de la red
-charles = Validador(350, 'charles')
-edwin = Validador(500, 'edwin')
-oliver = Validador(200, 'oliver')
-erick = Validador(90, 'erick')
-sonia = Validador(275, 'sonia')
+charles = Validator(350, 'charles')
+edwin = Validator(500, 'edwin')
+oliver = Validator(200, 'oliver')
+erick = Validator(90, 'erick')
+sonia = Validator(275, 'sonia')
 
 # Los incluimos en nuestra BlockChain
 blockchain.set_validators((charles, edwin, oliver, erick, sonia))

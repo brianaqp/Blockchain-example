@@ -18,4 +18,7 @@ https://medium.com/techskill-brew/proof-of-stake-or-pos-in-blockchain-part-8-blo
 
 Lo que debo de hacer ahora es seguir lo que dice la pagina de arriba para incluir Proof Of Stake
 
-Ya se seleccionaron los validadores y al ganador. Me quede en la funcion add_tx_to_block.
+# Lo que sigue:
+Sigo en la funcion de add_tx, pero especificamente en:
+- Forjador firma el bloque. (Hace la firma)
+- Los demas validadores deberian de revisar que esa firma sea correcta. (Aqui voy.)
