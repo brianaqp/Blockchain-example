@@ -2,6 +2,7 @@ import json
 from Block import Block
 from Transaction import Transaction
 from tokens import Token
+from attestor import Attestor
 from forge import Forge
 from account import Account
 from Crypto.Hash import SHA256
@@ -97,7 +98,13 @@ class Blockchain:
             verified_tx = forger.verify_tx(self.holding_tx)
             block = Block(previous_hash=self.chain[-1].hash, list_of_transactions=verified_tx, block_number=_block_number)
             forger.sign_block(block)
-
+            # el forjador manda el bloque
+            # se debe de crear el objeto attestor
+            attestors = [Attestor(attestor) for attestor in attestors]
+            forger.broadcast()
+            # cada uno debe de dar un visto bueno
+            # confirmar la señal
+            # al final dar permiso para meter el bloque
 
             
     def mine(self, block) -> None:
