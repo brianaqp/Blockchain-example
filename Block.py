@@ -9,6 +9,7 @@ class Block:
         self.list_of_transactions = list_of_transactions
         self.nonce = 0
         self.hash = 0
+        self.miner = None # Persona que mino el bloque, aunque no es tan necesaria esa info actualmente
         self.merkle_root = 0
         for tx in self.list_of_transactions:
             tx.block = block_number
@@ -17,13 +18,24 @@ class Block:
         time = now.strftime("%H:%M:%S")
         today = str(date.today())
         self.time_stamp = time + " " + today
+        # atributos utilizados con Proof of Stake.
+        self.forger = None
 
     def get_block_header(self):
         return {
             'previous_block_hash':self.previous_hash,
             'nonce': self.nonce,
-            'transactions':self.get_tx_in_format()
+            'transactions':self.get_tx_in_format(),
         }
+    
+    def get_block_header_pos(self):
+        return {
+            'previous_block_hash':self.previous_hash,
+            'nonce': self.nonce,
+            'transactions':self.get_tx_in_format(),
+            'forger': self.forger.validator.identity
+            }
+
 
     def print_block_info(self):
         print("-------------")

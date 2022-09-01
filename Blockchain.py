@@ -1,8 +1,9 @@
+import atexit
 import json
 from Block import Block
-from Transaction import Transaction
+from Transaction import Transaction, TxStatus
 from tokens import Token
-from attestor import Attestor
+from attestor import Attestor, Attestors
 from forge import Forge
 from account import Account
 from Crypto.Hash import SHA256
@@ -20,9 +21,11 @@ class Blockchain:
         self.stackers = {}
         self.total_stacked = 0
         self.validators = {}
+        self.last_block = None
 
     def generate_genesis_block(self):
         """Inicializa el bloque genesis."""
+        print('asdfas')
         if len(self.chain) == 0: # Comprueba que la blockchain este vacia.
             tx = Transaction(Account("Genesis0"), 0, Account("Genesis01"))
             block = Block('0', [tx], 0)
@@ -48,13 +51,13 @@ class Blockchain:
             print()
             print('No tienes suficiente balance en tu cuenta.')
             return
+        print('\n','Nueva transaccion detectada... Balance suficiente.')
         # 1. Instanciar un objeto transaccion.
         tx = Transaction(_sender, _value, _receiver)
         # 1.2 Al momento de instanciar el objeto, le restamos a la cuenta principal
         # el dinero que envio.
         _sender.balance -= _value
-        print()
-        print("Nueva transaccion detectada... Estado: {}".format(tx.status.name))
+        print("Estado: {}".format(tx.status.name))
         # 2. Esta transaccion necesita ser firmada (confirmada).
         tx.sign_transaction()
         # Aqui no se si sea correcto verificar la firma de una vez. Mas que nada por el consenso PoS.
@@ -79,6 +82,7 @@ class Blockchain:
         _block_number = len(self.chain)
         # Consenso Proof of Work
         if self.consensus == 'PoW':
+            print('En PoW')
             block = Block(previous_hash=self.chain[-1].hash,list_of_transactions=self.holding_tx, block_number=_block_number)
             self.mine(block)
             self.chain.append(block)
@@ -91,20 +95,34 @@ class Blockchain:
         # Consenso Proof of Stake
         if self.consensus == 'PoS':
             print('En PoS:')
-            forger, attestors = self.select_the_forger()
-            print('Testigos: ', attestors)
-            print('Forjador: ', forger)
+            forger, validators_with_out_forger = self.select_the_forger()
+            # Los validadores no seleccionados pasan a ser objetos Attestors.
+            attestors = Attestors(validators_with_out_forger)
+            print('Testigos: ', [attestor.validator.nickname for attestor in attestors.group])
+            print('Forjador: ', [forger.validator.nickname])
             # En proceso de verificar las tx...
             verified_tx = forger.verify_tx(self.holding_tx)
-            block = Block(previous_hash=self.chain[-1].hash, list_of_transactions=verified_tx, block_number=_block_number)
-            forger.sign_block(block)
-            # el forjador manda el bloque
-            # se debe de crear el objeto attestor
-            attestors = [Attestor(attestor) for attestor in attestors]
-            forger.broadcast()
-            # cada uno debe de dar un visto bueno
-            # confirmar la señal
-            # al final dar permiso para meter el bloque
+            forger.create_a_block(self.chain[-1].hash, verified_tx, _block_number)
+            forger.sign_block()
+            # el forjador manda el bloque a la red
+            print('### Enviando el bloque a la red...')
+            self.last_block = forger.broadcast_block()
+            print('### Iniciando atestiguamiento del bloque...')
+            if attestors.attest(self.last_block):
+                self.chain.append(self.last_block)
+                print("### Bloque creado. ###\n")
+                self.holding_tx = []
+                for tx in self.last_block.list_of_transactions:
+                    tx.block = _block_number
+                self.verify_latest_tx()
+                self.send_money_to_receivers()
+            else:
+                print('No se pudo incluir el bloque.')
+                return
+            # Cada testigo va a 'atestiguar' que el forjador verifico correctamente las transacciones y su bloque esta bien hecho.
+            # Si esta correcto, daran su 'confirmacion'. 
+            # Se necesita que el 75% de los testigos den su confirmacion positiva para anexar el bloque a la cadena de bloques.
+            
 
             
     def mine(self, block) -> None:
@@ -146,7 +164,7 @@ class Blockchain:
         block_transactions = latest_block.list_of_transactions
         for tx in block_transactions:
             # Condicional que cambia el estado de la transaccion a Declinada
-            tx.change_status('DECLINADA')
+            # tx.change_status('DECLINADA')
             if tx.status.name == 'CONFIRMADA':
                 tx.recipient.balance += tx.value
             if tx.status.name == 'DECLINADA':
@@ -188,7 +206,7 @@ class Blockchain:
         for validator in self.validators:
             pool += validator.tokens
         # 3.- Se revuelve la lista. (Como si fuera un sorteo.)
-        print('Acumulando los tokens de los participantes de la lista...')
+        print('Acumulando los tokens de los validadores en el servidor actual...')
         print(len(pool), '- tokens acumulados.')
         print('Revolviendo la lista...')
         pool = sample(pool, len(pool))
@@ -205,11 +223,10 @@ class Blockchain:
         # Aqui deberia de ir algo estilo, escojer el ticket ganador.
         ticket_winner = choice(pool)
         forger = Forge(ticket_winner.owner)
-        print(forger)
-        print(f'El forjador del nuevo bloque sera... {forger.validator}')
+        print(f'El forjador del nuevo bloque sera... {forger.validator.nickname}')
         # los validadores no ganadores del sorteo pasan a ser testigos.
         # los testigos estan encargados de revisar que el forjador haga lo correcto
-        attestors = [validator for validator in self.validators]
+        validators_with_out_forger = [validator for validator in self.validators]
         # se remueve el forjador, asi solo quedan los testigos
-        attestors.remove(forger.validator)
-        return forger, attestors
+        validators_with_out_forger.remove(forger.validator)
+        return forger, validators_with_out_forger

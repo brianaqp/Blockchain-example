@@ -23,12 +23,8 @@ sonia = Validator(275, 'sonia')
 blockchain.set_validators((charles, edwin, oliver, erick, sonia))
 
 # generamos y subimos las transacciones a la blockchain
-blockchain.new_tx(brian, 10, aaron)
-
-
-# Prueba
-for validator in blockchain.validators.keys():
-    print('Validor: ')
-    print(validator.get_tokens())
-    
-        # print(token.owner.nickname)
+blockchain.new_tx(brian, 20, aaron)
+blockchain.new_tx(brian, 20, aaron)
+print(brian.balance, aaron.balance)
+print(blockchain.chain[-2].forger.validator.nickname)
+print(blockchain.chain[-1].forger.validator.nickname)
