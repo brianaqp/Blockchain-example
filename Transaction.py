@@ -1,7 +1,6 @@
 from datetime import datetime
 from enum import Enum
 from account import Account
-from hashlib import new
 from Crypto.Signature.pkcs1_15 import PKCS115_SigScheme
 from Crypto.Hash import SHA256
 

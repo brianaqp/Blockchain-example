@@ -6,12 +6,12 @@ from tokens import Token
 class Account:
     def __init__(self, nickname: str):
         self.nickname = nickname
+        self.balance = 100
+        self.list_of_all_transactions = []
         self.private_key = RSA.generate(1024)
         self.public_key = self.private_key.publickey()
         self.signer = PKCS115_SigScheme(self.private_key)
         self.verifier = PKCS115_SigScheme(self.public_key)
-        self.balance = 100
-        self.list_of_all_transactions = []
 
     @property
     def identity(self):
