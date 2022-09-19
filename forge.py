@@ -1,7 +1,7 @@
 from Crypto.Hash import SHA256
 import json
 
-from Block import Block
+from block import Block
 
 class Forge():
     def __init__(self, validator):

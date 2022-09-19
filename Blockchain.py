@@ -1,7 +1,7 @@
 import atexit
 import json
-from Block import Block
-from Transaction import Transaction, TxStatus
+from block import Block
+from transaction import Transaction, TxStatus
 from tokens import Token
 from attestor import Attestor, Attestors
 from forge import Forge
@@ -135,8 +135,8 @@ class Blockchain:
         block_hash = block_hashed.hexdigest()
         # Proceso de minado
         # 1.Set difficulty, the difficulty_hash below is the equivalent of requiring 2 zeros at the front of the hash
-        difficulty_hash = 0x0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-        difficult_decimal = 452312848583266388373324160190187140051835877600158453279131187530910662655
+        difficulty_hash = 0x0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        difficult_decimal = 1766847064778384329583297500742918515827483896875618958121606201292619775 # equivalencia en decimal
         # While the hash is bigger than or equal to the difficulty continue to iterate the nonce
         while int(block_hashed.hexdigest(), 16) >= difficulty_hash:
             block.nonce += 1 # Increment Nonce

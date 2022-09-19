@@ -1,5 +1,5 @@
 from account import Account, Validator
-from Blockchain import Blockchain
+from blockchain import Blockchain
 
 # Inicializamos nuestra cadena de bloques
 print("### Inicializamos nuestra blockchain")
