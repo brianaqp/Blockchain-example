@@ -30,8 +30,9 @@ class Transaction:
             'value': self.value,
             'time' : self.time}
 
-    def sign_transaction(self):
-        """Recibe un objeto transaccion y devuelve la firmaen bytes"""
+    def sign_transaction(self): # (1)
+        """Funcion que recibe un objeto transaccion y devuelve 
+        la firma de la transaccion en bytes"""
         print("Firmando transaccion...")
         msg = str(self.to_dict()).encode()
         hash = SHA256.new(msg)
@@ -40,7 +41,7 @@ class Transaction:
         # print("Signature:", binascii.hexlify(signature))
         self.signature = signature
 
-    def verify_signature(self) -> bool:
+    def verify_signature(self) -> bool: # (1)
         """Aqui se verifican las transacciones"""
         print("Verificando la firma de la transaccion...")
         msg = str(self.to_dict()).encode()
@@ -54,10 +55,10 @@ class Transaction:
             print("La firma es invalida.")
             return False
 
-    def change_status(self, new_status):
-        if new_status is 'CONFIRMADA':
+    def change_status(self, new_status): # (3)
+        if new_status == 'CONFIRMADA':
             self.status = TxStatus.CONFIRMADA
-        elif new_status is 'PENDIENTE':
+        elif new_status == 'PENDIENTE':
             self.status = TxStatus.PENDIENTE
-        elif new_status is 'DECLINADA':
+        elif new_status == 'DECLINADA':
             self.status = TxStatus.DECLINADA
