@@ -4,7 +4,7 @@ from block import Block
 from transaction import Transaction, TxStatus
 from tokens import Token
 from attestor import Attestor, Attestors
-from forge import Forge
+from forge import Forger
 from account import Account
 from Crypto.Hash import SHA256
 from random import sample, choice
@@ -221,7 +221,7 @@ class Blockchain:
         # Fin de la validacion
         # Aqui deberia de ir algo estilo, escojer el ticket ganador.
         ticket_winner = choice(pool)
-        forger = Forge(ticket_winner.owner)
+        forger = Forger(ticket_winner.owner)
         print(f'El forjador del nuevo bloque sera... {forger.validator.account.nickname}')
         # los validadores no ganadores del sorteo pasan a ser testigos.
         # los testigos estan encargados de revisar que el forjador haga lo correcto

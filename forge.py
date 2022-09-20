@@ -3,7 +3,7 @@ import json
 
 from block import Block
 
-class Forge():
+class Forger():
     def __init__(self, validator):
         self.validator = validator
         self.block = None
