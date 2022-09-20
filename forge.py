@@ -33,7 +33,7 @@ class Forge():
         block_header = json.dumps(self.block.get_block_header_pos()).encode() # Convert data to byte form so it can be hashed
         block_hashed = SHA256.new(block_header) 
         #
-        signer = self.validator.signer
+        signer = self.validator.account.signer
         signature = signer.sign(block_hashed)
         self.block.hash = block_hashed.hexdigest()
         self.block_signature = signature

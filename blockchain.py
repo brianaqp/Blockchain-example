@@ -27,7 +27,7 @@ class Blockchain:
         """Inicializa el bloque genesis."""
         print('asdfas')
         if len(self.chain) == 0: # Comprueba que la blockchain este vacia.
-            tx = Transaction(Account("Genesis0"), 0, Account("Genesis01"))
+            tx = Transaction(Account(0, "Genesis0"), 0, Account(0, "Genesis01"))
             block = Block('0', [tx], 0)
             self.mine(block)
             self.chain.append(block)
@@ -98,8 +98,8 @@ class Blockchain:
             forger, validators_with_out_forger = self.select_the_forger()
             # Los validadores no seleccionados pasan a ser objetos Attestors.
             attestors = Attestors(validators_with_out_forger)
-            print('Testigos: ', [attestor.validator.nickname for attestor in attestors.group])
-            print('Forjador: ', [forger.validator.nickname])
+            print('Testigos: ', [attestor.validator.account.nickname for attestor in attestors.group])
+            print('Forjador: ', [forger.validator.account.nickname])
             # En proceso de verificar las tx...
             verified_tx = forger.verify_tx(self.holding_tx)
             forger.create_a_block(self.chain[-1].hash, verified_tx, _block_number)
@@ -176,19 +176,18 @@ class Blockchain:
 
     # Apartir de aqui iniciare las funciones pertinentes a Proof of Stake.
 
-    def set_validators(self, validators):
+    def set_validators(self, accounts):
         """Funcion que determina los validadores de la red."""
+        from account import Validator
+        for account in accounts:
+            if account.balance >= 100: # Si tiene 100 o mas de 1000 de balance, puede ser un validador
+                new_validator = Validator(account)
+                self.total_stacked += new_validator.account.balance
+                new_validator.set_tokens(new_validator.account.balance)
+                self.validators.update({new_validator: new_validator.account.balance})
+                new_validator.account.balance -= new_validator.account.balance
         # La variable self.validators almacena las direcciones de los validadores
         # y el dinero que metieron en stack. (Similar a un SmartContract)
-        for validator in validators:
-            self.total_stacked += validator.balance
-            self.stackers.update({validator: validator.balance})
-            if validator.balance > 100: # Si stackea mas de 100 monedas, puede ser validador.
-                self.validators.update({validator: validator.balance})
-                validator.set_tokens(validator.balance)
-            validator.balance -= validator.balance
-        # No es lo mismo un validador que una persona que stackea su dinero. Por eso
-        # existen 2 variables.
 
     def select_the_forger(self):
         """Funcion que selecciona que validador va a ser el forjador del nuevo bloque."""
@@ -215,15 +214,15 @@ class Blockchain:
         contador = 0
         for validator in self.validators.keys():
             for token in pool:
-                if token.owner.nickname == validator.nickname:
+                if token.owner.account.nickname == validator.account.nickname:
                     contador += 1
-            print(validator.nickname, contador)
+            print(validator.account.nickname, contador)
             contador = 0
         # Fin de la validacion
         # Aqui deberia de ir algo estilo, escojer el ticket ganador.
         ticket_winner = choice(pool)
         forger = Forge(ticket_winner.owner)
-        print(f'El forjador del nuevo bloque sera... {forger.validator.nickname}')
+        print(f'El forjador del nuevo bloque sera... {forger.validator.account.nickname}')
         # los validadores no ganadores del sorteo pasan a ser testigos.
         # los testigos estan encargados de revisar que el forjador haga lo correcto
         validators_with_out_forger = [validator for validator in self.validators]

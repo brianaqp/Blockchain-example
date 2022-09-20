@@ -9,8 +9,8 @@ blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 blockchain.set_consensus('PoW')
 
 # Creamos dos cuenta que interactuaran con la blockchain.
-brian = Account("Brian")
-aaron = Account("Aaron")
+brian = Account(100, "Brian")
+aaron = Account(100, "Aaron")
 
 
 # generamos y subimos las transacciones a la blockchain

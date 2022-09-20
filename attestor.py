@@ -8,11 +8,10 @@ class Attestor():
     def check_block(self, block):
         block_header = json.dumps(block.get_block_header_pos()).encode()
         block_hashed = SHA256.new(block_header)
-        verifier = block.forger.validator.verifier
-        # print(verifier, block.forger.signature)
+        verifier = block.forger.validator.account.verifier
         try:
             verifier.verify(block_hashed, block.forger.block_signature)
-            print(f"{self.validator.nickname}: Confirmo que la firma del bloque es correcta.")
+            print(f"{self.validator.account.nickname}: Confirmo que la firma del bloque es correcta.")
             return True
         except:
             print("La firma es invalida.")

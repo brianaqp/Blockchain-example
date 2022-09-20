@@ -9,15 +9,15 @@ blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 blockchain.set_consensus('PoS')
 
 # Creamos dos cuenta que interactuaran con la blockchain.
-brian = Account("Brian")
-aaron = Account("Aaron")
+brian = Account(100, "Brian")
+aaron = Account(100, "Aaron")
 
-# Inicializamos a los Validadores de la red
-charles = Validator(350, 'charles')
-edwin = Validator(500, 'edwin')
-oliver = Validator(200, 'oliver')
-erick = Validator(90, 'erick')
-sonia = Validator(275, 'sonia')
+# Inicializamos 5 cuentas que quieran ser validadores
+charles = Account(350, 'charles')
+edwin = Account(500, 'edwin')
+oliver = Account(200, 'oliver')
+erick = Account(90, 'erick')
+sonia = Account(275, 'sonia')
 
 # Los incluimos en nuestra BlockChain
 blockchain.set_validators((charles, edwin, oliver, erick, sonia))
@@ -26,5 +26,5 @@ blockchain.set_validators((charles, edwin, oliver, erick, sonia))
 blockchain.new_tx(brian, 20, aaron)
 blockchain.new_tx(brian, 20, aaron)
 print(brian.balance, aaron.balance)
-print(blockchain.chain[-2].forger.validator.nickname)
-print(blockchain.chain[-1].forger.validator.nickname)
+print(blockchain.chain[-2].forger.validator.account.nickname)
+print(blockchain.chain[-1].forger.validator.account.nickname)
