@@ -16,9 +16,7 @@ class Blockchain:
         self.chain = []
         self.tx_limit_per_block = 1
         self.holding_tx = []
-        self.generate_genesis_block()
         # Atributos propios de PoS
-        self.stackers = {}
         self.total_stacked = 0
         self.validators = {}
         self.last_block = None
@@ -134,21 +132,24 @@ class Blockchain:
         block_hashed = SHA256.new(block_header)
         block_hash = block_hashed.hexdigest()
         # Proceso de minado
-        # 1.Set difficulty, the difficulty_hash below is the equivalent of requiring 2 zeros at the front of the hash
-        difficulty_hash = 0x0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-        difficult_decimal = 1766847064778384329583297500742918515827483896875618958121606201292619775 # equivalencia en decimal
-        # While the hash is bigger than or equal to the difficulty continue to iterate the nonce
-        while int(block_hashed.hexdigest(), 16) >= difficulty_hash:
-            block.nonce += 1 # Increment Nonce
-            block_header = json.dumps(block.get_block_header()).encode() # Convert data to byte form so it can be hashed
-            block_hashed = SHA256.new(block_header) 
-            print('Nonce Guess: ', block.nonce)
-            print('Resultant Hash: ' + str(block_hashed.hexdigest()))
-            print('Decimal value of hash: ' + str(int(block_hashed.hexdigest(), 16)) + '\n')
-            block_hash = block_hashed.hexdigest() # The hash of the blockheader with that nonce yields the block hash for that block
-        print('Winner hash: ', block_hash)
-        block.hash = block_hash
-
+        if self.consensus == 'PoW':
+        # 1. Dificultad
+            difficulty_hash = 0x0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            difficult_decimal = 1766847064778384329583297500742918515827483896875618958121606201292619775 # equivalencia de difficulty_hash en decimal
+            # Sigue hasta que el hash sea menor o igual a la dificultad
+            while int(block_hashed.hexdigest(), 16) >= difficulty_hash:
+                block.nonce += 1 # Incremento del Nonce 
+                block_header = json.dumps(block.get_block_header()).encode() # Se convierte el valor a string.
+                block_hashed = SHA256.new(block_header) # Pdd. Va a salir distinto por el cambio de nonce!
+                print('Nonce Guess: ', block.nonce)
+                print('Resultant Hash: ' + str(block_hashed.hexdigest()))
+                print('Decimal value of hash: ' + str(int(block_hashed.hexdigest(), 16)) + '\n')
+                block_hash = block_hashed.hexdigest() # El bloque guarda el hash en hexadecimal
+            print('Winner hash: ', block_hash)
+            block.hash = block_hash
+        if self.consensus == 'PoS':
+            # Para pos vamos a saltar el proceso de minado
+            block.hash = block_hash
 
     def verify_latest_tx(self):
         """Pone como confirmadas las transacciones que ya forman parte de la cadena de
@@ -178,16 +179,13 @@ class Blockchain:
 
     def set_validators(self, accounts):
         """Funcion que determina los validadores de la red."""
-        from account import Validator
         for account in accounts:
-            if account.balance >= 100: # Si tiene 100 o mas de 1000 de balance, puede ser un validador
-                new_validator = Validator(account)
-                self.total_stacked += new_validator.account.balance
-                new_validator.set_tokens(new_validator.account.balance)
-                self.validators.update({new_validator: new_validator.account.balance})
-                new_validator.account.balance -= new_validator.account.balance
-        # La variable self.validators almacena las direcciones de los validadores
-        # y el dinero que metieron en stack. (Similar a un SmartContract)
+            if account.balance >= 100: # Si tiene igual o mas de 100 en balance, puede ser un validador.
+                new_validator = Validator(account) # Se crea un validador mandando la cuenta
+                self.total_stacked += new_validator.account.balance # Se anade el balance de la cuenta como al stack total de la red
+                new_validator.set_tokens(new_validator.account.balance) # Se anaden tokens por cuenta
+                self.validators.update({new_validator: new_validator.account.balance}) # se anade en un diccionario un registro de {cuenta: balance ingresado}
+                new_validator.account.balance -= new_validator.account.balance # Se resta el balance de la cuenta
 
     def select_the_forger(self):
         """Funcion que selecciona que validador va a ser el forjador del nuevo bloque."""

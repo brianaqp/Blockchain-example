@@ -8,6 +8,9 @@ blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 # Escojemos que protocolo queremos en nuestra blockchain
 blockchain.set_consensus('PoS')
 
+# inicializamos el bloque genesis
+blockchain.generate_genesis_block()
+
 # Creamos dos cuenta que interactuaran con la blockchain.
 brian = Account(100, "Brian")
 aaron = Account(100, "Aaron")
@@ -28,3 +31,5 @@ blockchain.new_tx(brian, 20, aaron)
 print(brian.balance, aaron.balance)
 print(blockchain.chain[-2].forger.validator.account.nickname)
 print(blockchain.chain[-1].forger.validator.account.nickname)
+
+print(blockchain.stackers)
