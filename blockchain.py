@@ -5,7 +5,7 @@ from transaction import Transaction, TxStatus
 from tokens import Token
 from attestor import Attestor, Attestors
 from forge import Forger
-from account import Account
+from account import Validator, Account
 from Crypto.Hash import SHA256
 from random import sample, choice
 import sys
@@ -23,7 +23,7 @@ class Blockchain:
 
     def generate_genesis_block(self):
         """Inicializa el bloque genesis."""
-        print('asdfas')
+        print("Inicializando bloque genesis...")
         if len(self.chain) == 0: # Comprueba que la blockchain este vacia.
             tx = Transaction(Account(0, "Genesis0"), 0, Account(0, "Genesis01"))
             block = Block('0', [tx], 0)
@@ -49,7 +49,7 @@ class Blockchain:
             print()
             print('No tienes suficiente balance en tu cuenta.')
             return
-        print('\n','Nueva transaccion detectada... Balance suficiente.')
+        print('Nueva transaccion detectada... Balance suficiente.')
         # 1. Instanciar un objeto transaccion.
         tx = Transaction(_sender, _value, _receiver)
         # 1.2 Al momento de instanciar el objeto, le restamos a la cuenta principal
@@ -126,7 +126,7 @@ class Blockchain:
     def mine(self, block) -> None:
         """Funciona que mina el bloque.
         Funciona segun el protocolo de Proof of Stake. """
-        print('Dentro de funcion minado...')
+        print('Dentro de funcion mine...')
         # Primero obtenemos el string que contiene toda la informacion del bloque.
         block_header = json.dumps(block.get_block_header()).encode()
         block_hashed = SHA256.new(block_header)
@@ -139,17 +139,19 @@ class Blockchain:
             # Sigue hasta que el hash sea menor o igual a la dificultad
             while int(block_hashed.hexdigest(), 16) >= difficulty_hash:
                 block.nonce += 1 # Incremento del Nonce 
-                block_header = json.dumps(block.get_block_header()).encode() # Se convierte el valor a string.
+                block_header = json.dumps(block.get_block_header()).encode() # Se convierte el valor a strin
                 block_hashed = SHA256.new(block_header) # Pdd. Va a salir distinto por el cambio de nonce!
-                print('Nonce Guess: ', block.nonce)
-                print('Resultant Hash: ' + str(block_hashed.hexdigest()))
-                print('Decimal value of hash: ' + str(int(block_hashed.hexdigest(), 16)) + '\n')
                 block_hash = block_hashed.hexdigest() # El bloque guarda el hash en hexadecimal
-            print('Winner hash: ', block_hash)
+
+            print('Nonce Guess: ', block.nonce)
+            print('Resultant Hash: ' + str(block_hashed.hexdigest()))
+            print('Decimal value of hash: ' + str(int(block_hashed.hexdigest(), 16)) + '\n')
             block.hash = block_hash
+            
         if self.consensus == 'PoS':
             # Para pos vamos a saltar el proceso de minado
             block.hash = block_hash
+            print("Hash añadido al bloque genesis...")
 
     def verify_latest_tx(self):
         """Pone como confirmadas las transacciones que ya forman parte de la cadena de
