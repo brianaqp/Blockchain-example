@@ -1,7 +1,7 @@
 import binascii
 from Crypto.PublicKey import RSA
 from Crypto.Signature.pkcs1_15 import PKCS115_SigScheme
-from tokens import Token
+from bin.tokens import Token
 
 class Account:
     def __init__(self, balance: int, nickname: str):
@@ -28,6 +28,3 @@ class Validator():
 
     def get_tokens(self):
         return len(self.tokens)
-    
-    
-    

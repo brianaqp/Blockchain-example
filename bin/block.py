@@ -9,19 +9,15 @@ class Block:
         self.list_of_transactions = list_of_transactions
         self.nonce = 0
         self.hash = 0
-        self.miner = None # Persona que mino el bloque, aunque no es tan necesaria esa info actualmente
-        self.merkle_root = 0
+        self.time_stamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        # Cuando se instancia un bloque, le asigna el blocknumber a cada transaccion.
         for tx in self.list_of_transactions:
             tx.block = block_number
-        # Anadir el time stamp
-        now = datetime.now()
-        time = now.strftime("%H:%M:%S")
-        today = str(date.today())
-        self.time_stamp = time + " " + today
         # atributos utilizados con Proof of Stake.
         self.forger = None
 
     def get_block_header(self):
+        """Funcion que retorna el encabezado del bloque."""
         return {
             'previous_block_hash':self.previous_hash,
             'nonce': self.nonce,
