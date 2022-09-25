@@ -1,5 +1,5 @@
-from account import Account, Validator
-from blockchain import Blockchain
+from bin.account import Account, Validator
+from bin.blockchain import Blockchain
 
 # Inicializamos nuestra cadena de bloques
 print("### Inicializamos nuestra blockchain")
@@ -31,5 +31,3 @@ blockchain.new_tx(brian, 20, aaron)
 print(brian.balance, aaron.balance)
 print(blockchain.chain[-2].forger.validator.account.nickname)
 print(blockchain.chain[-1].forger.validator.account.nickname)
-
-print(blockchain.stackers)

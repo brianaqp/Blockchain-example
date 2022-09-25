@@ -1,5 +1,5 @@
-from account import Account
-from blockchain import Blockchain
+from bin.account import Account
+from bin.blockchain import Blockchain
 
 # Inicializamos nuestra cadena de bloques
 print("### Inicializamos nuestra blockchain")
@@ -8,13 +8,16 @@ blockchain = Blockchain()  # Tambien se crea el bloque genesis.
 # Escojemos que protocolo queremos en nuestra blockchain
 blockchain.set_consensus('PoW')
 
+# Inicializamos el bloque genesis
+blockchain.generate_genesis_block()
+
 # Creamos dos cuenta que interactuaran con la blockchain.
 brian = Account(100, "Brian")
 aaron = Account(100, "Aaron")
 
 
 # generamos y subimos las transacciones a la blockchain
-blockchain.new_tx(brian, 101, aaron)
+blockchain.new_tx(brian, 101, aaron) # Esta brinca en error
 blockchain.new_tx(brian, 20, aaron)
 blockchain.new_tx(brian, 15, aaron)
 blockchain.new_tx(brian, 1, aaron)
