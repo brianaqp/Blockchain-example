@@ -1,11 +1,11 @@
 import atexit
 import json
-from block import Block
-from transaction import Transaction, TxStatus
-from tokens import Token
-from attestor import Attestor, Attestors
-from forge import Forger
-from account import Validator, Account
+from bin.block import Block
+from bin.transaction import Transaction, TxStatus
+from bin.tokens import Token
+from bin.attestor import Attestor, Attestors
+from bin.forger import Forger
+from bin.account import Validator, Account
 from Crypto.Hash import SHA256
 from random import sample, choice
 import sys
@@ -13,6 +13,7 @@ import sys
 
 class Blockchain:
     def __init__(self):
+        self.protocol = None
         self.chain = []
         self.tx_limit_per_block = 1
         self.holding_tx = []

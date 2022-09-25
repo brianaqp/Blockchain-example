@@ -1,5 +1,5 @@
 from datetime import datetime, date
-from account import Account
+from bin.account import Account
 
 
 class Block:
