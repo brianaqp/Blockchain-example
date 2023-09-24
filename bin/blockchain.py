@@ -47,8 +47,9 @@ class Blockchain:
         para luego ser parte de un bloque. """
         # 0.5. Se debe verificar que quien manda la tx, tenga suficiente balance en su cuenta.
         if _value > _sender.balance: 
-            print()
-            print('No tienes suficiente balance en tu cuenta.')
+            print('\n### --- No tienes suficiente balance en tu cuenta. --- ###')
+            print('### --- La transacción no puede agregarse a la red. --- ###\n')
+
             return
         print('Nueva transaccion detectada... Balance suficiente.')
         # 1. Instanciar un objeto transaccion.
