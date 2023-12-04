@@ -3,7 +3,7 @@ from bin.blockchain import Blockchain
 
 # Inicializamos nuestra cadena de bloques
 print("### Inicializamos nuestra blockchain")
-blockchain = Blockchain()  # Tambien se crea el bloque genesis.
+blockchain = Blockchain()  
 
 # Escojemos que protocolo queremos en nuestra blockchain
 blockchain.set_consensus('PoS')
